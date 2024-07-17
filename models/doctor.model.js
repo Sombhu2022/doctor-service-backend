@@ -3,7 +3,7 @@ import autoIncrement  from 'mongoose-sequence'
 
 import bcrypt from 'bcrypt'
 
-const doctorSchema = Schema({
+const doctorSchema =new Schema({
     doctorId: {
       type: Number,
       unique: true
@@ -25,7 +25,9 @@ const doctorSchema = Schema({
     passwordHash: {
       type: String,
       required: true,
-      maxlength: 255
+      minLangth:[8 , "password shoud be minimum 8 charectors"],
+      maxlength: 15,
+      Select:false
     },
     specialty: {
       type: String,
@@ -40,8 +42,9 @@ const doctorSchema = Schema({
 // autoincrement doctorid ... 
   doctorSchema.plugin(autoIncrement(mongoose) , { inc_field: "doctorId"})
 
-// Pre-save hook to hash password ... change password to hashpassword
 
+
+// Pre-save hook use to hash password ... change password to hashpassword
 doctorSchema.pre("save", async function (next) {
   if (!this.isModified("passwordHash")) {
       next();
@@ -54,5 +57,9 @@ doctorSchema.pre("save", async function (next) {
       next(error)
   }
 });
+
+doctorSchema.methods.comparePassword= async(password)=>{
+   return await bcrypt.compare(password , this.passwordHash)
+}
 
 export const Doctors = model("Doctors", doctorSchema);
