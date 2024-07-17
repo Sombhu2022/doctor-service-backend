@@ -9,6 +9,7 @@ import "dotenv/config"
 
 import { dbConnection } from "./database/database.js"
 import { doctorRouter } from "./routers/doctor.router.js"
+import { patientRouter } from "./routers/patient.router.js"
 
 
 
@@ -39,6 +40,7 @@ server.use(cors({
 
 // all routers ...
 server.use("/doctor" ,doctorRouter)
+server.use("/patient" , patientRouter)
 
 // run server .....
 server.listen(process.env.PORT , ()=>{
