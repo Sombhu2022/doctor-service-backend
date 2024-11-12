@@ -1,7 +1,7 @@
 import { Doctors } from "../models/doctor.model.js"
 import { backendResponse } from "../utils/asyncResponse.js"
 import { tokenGenarate } from "../utils/sendToken.js";
-
+import { sendSignUrl } from "../utils/uploadFile.js";
 
 
 export const registerDoctor = async(req , res)=>{
@@ -80,5 +80,22 @@ export const logOutDoctor = async(req , res)=>{
     } catch (error) {
         res.status(400).json({success:false, message:"somthing error , check your network connection " , error})   
         
+    }
+}
+
+
+export const createSignUrlForFileUploading = async(req , res)=>{
+    const { fileName, type } = req.body;
+
+    try {
+      const { url, error } = await sendSignUrl(fileName, type);
+  
+      if (error) {
+        return res.status(500).json({ error: 'Error generating signed URL' });
+      }
+  
+     return  res.status(200).json({ url , message: 'sign url genarate successfully !'});
+    } catch (err) {
+     return  res.status(500).json({ error: 'Server error' });
     }
 }

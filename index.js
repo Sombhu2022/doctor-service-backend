@@ -10,6 +10,10 @@ import "dotenv/config"
 import { dbConnection } from "./database/database.js"
 import { doctorRouter } from "./routers/doctor.router.js"
 import { patientRouter } from "./routers/patient.router.js"
+import { awsConfig } from "./config/awsConfig.js"
+
+
+
 
 
 
@@ -22,6 +26,7 @@ server.use(bodyParser.json({limit:"50mb"}))
 server.use(bodyParser.urlencoded({limit:"50mb" , extended:true}))
 server.use(express.json({limit:"50mb"}))
 server.use(fileUpload({limits:{fileSize:  50 * 1024 *1024} }))
+
 
 // database conectivity...
 
@@ -39,8 +44,9 @@ server.use(cors({
 // other configration ...
 
 // all routers ...
-server.use("/doctor" ,doctorRouter)
-server.use("/patient" , patientRouter)
+server.use("/api/v1/doctor" , doctorRouter)
+server.use("/api/v1/patient" , patientRouter)
+
 
 // run server .....
 server.listen(process.env.PORT , ()=>{
